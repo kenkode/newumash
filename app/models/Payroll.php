@@ -540,33 +540,33 @@ public static $rules = [
     if($emp->income_tax_applicable=='0'){
     $paye=0.00;
     }else if($emp->income_tax_applicable=='1' && $emp->income_tax_relief_applicable=='1'){
-    if($taxable>=11135.67 && $taxable<19741){
-    $paye = 1016.4+($taxable-10165)*15/100;
-    $paye = $paye-1162.00-static::reliefall($id,$period);
-    }else if($taxable>=19741 && $taxable<29317){
-    $paye = 2452.8+($taxable-19741)*20/100;
-    $paye = $paye-1162.00-static::reliefall($id,$period);
-    }else if($taxable>=29317 && $taxable<38893){
-    $paye = 4368+($taxable-29317)*25/100;
-    $paye = $paye-1162.00-static::reliefall($id,$period);
-    }else if($taxable>=38893){
-    $paye = 6762+($taxable-38893)*30/100;
-    $paye = $paye-1162.00-static::reliefall($id,$period);
+    if($taxable>=11180 && $taxable<21715){
+    $paye = 1118+($taxable-11180)*15/100;
+    $paye = $paye-1280.00-static::reliefall($id,$period);
+    }else if($taxable>=21715 && $taxable<32249){
+    $paye = 2698.03+($taxable-21715)*20/100;
+    $paye = $paye-1280.00-static::reliefall($id,$period);
+    }else if($taxable>=32249 && $taxable<42783){
+    $paye = 4804.73+($taxable-32249)*25/100;
+    $paye = $paye-1280.00-static::reliefall($id,$period);
+    }else if($taxable>=42783){
+    $paye = 7438.11+($taxable-42783)*30/100;
+    $paye = $paye-1280.00-static::reliefall($id,$period);
     }else{
     $paye = 0.00;
     }
     }else if($emp->income_tax_applicable=='1' && $emp->income_tax_relief_applicable=='0'){
-    if($taxable>=11135.67 && $taxable<19741){
-    $paye = 1016.4+($taxable-10165)*15/100;
+    if($taxable>=11180 && $taxable<21715){
+    $paye = 1118+($taxable-11180)*15/100;
     $paye = $paye-static::reliefall($id,$period);
-    }else if($taxable>=19741 && $taxable<29317){
-    $paye = 2452.8+($taxable-19741)*20/100;
+    }else if($taxable>=21715 && $taxable<32249){
+    $paye = 2698.03+($taxable-21715)*20/100;
     $paye = $paye-static::reliefall($id,$period);
-    }else if($taxable>=29317 && $taxable<38893){
-    $paye = 4368+($taxable-29317)*25/100;
+    }else if($taxable>=32249 && $taxable<42783){
+    $paye = 4804.73+($taxable-32249)*25/100;
     $paye = $paye-static::reliefall($id,$period);
-    }else if($taxable>=38893){
-    $paye = 6762+($taxable-38893)*30/100;
+    }else if($taxable>=42783){
+    $paye = 7438.11+($taxable-42783)*30/100;
     $paye = $paye-static::reliefall($id,$period);
     }else{
     $paye = 0.00;
@@ -582,7 +582,7 @@ public static $rules = [
    }
 
 
-       public static function totaltax($id,$period){
+    public static function totaltax($id,$period){
     $paye = 0.00;
     $total_pay = static::gross($id,$period);
     $total_nssf = static::nssf($id,$period);
@@ -592,33 +592,33 @@ public static $rules = [
     if($emp->income_tax_applicable=='0'){
     $paye=0.00;
     }else if($emp->income_tax_applicable=='1' && $emp->income_tax_relief_applicable=='1'){
-    if($taxable>=11135.67 && $taxable<19741){
-    $paye = 1016.4+($taxable-10165)*15/100;
+    if($taxable>=11180 && $taxable<21715){
+    $paye = 1118+($taxable-11180)*15/100;
     $paye = $paye;
-    }else if($taxable>=19741 && $taxable<29317){
-    $paye = 2452.8+($taxable-19741)*20/100;
+    }else if($taxable>=21715 && $taxable<32249){
+    $paye = 2698.03+($taxable-21715)*20/100;
     $paye = $paye;
-    }else if($taxable>=29317 && $taxable<38893){
-    $paye = 4368+($taxable-29317)*25/100;
+    }else if($taxable>=32249 && $taxable<42783){
+    $paye = 4804.73+($taxable-32249)*25/100;
     $paye = $paye;
-    }else if($taxable>=38893){
-    $paye = 6762+($taxable-38893)*30/100;
+    }else if($taxable>=42783){
+    $paye = 7438.11+($taxable-42783)*30/100;
     $paye = $paye;
     }else{
     $paye = 0.00;
     }
     }else if($emp->income_tax_applicable=='1' && $emp->income_tax_relief_applicable=='0'){
-    if($taxable>=11135.67 && $taxable<19741){
-    $paye = 1016.4+($taxable-10165)*15/100;
+    if($taxable>=11180 && $taxable<21715){
+    $paye = 1118+($taxable-11180)*15/100;
     $paye = $paye;
-    }else if($taxable>=19741 && $taxable<29317){
-    $paye = 2452.8+($taxable-19741)*20/100;
+    }else if($taxable>=21715 && $taxable<32249){
+    $paye = 2698.03+($taxable-21715)*20/100;
     $paye = $paye;
-    }else if($taxable>=29317 && $taxable<38893){
-    $paye = 4368+($taxable-29317)*25/100;
+    }else if($taxable>=32249 && $taxable<42783){
+    $paye = 4804.73+($taxable-32249)*25/100;
     $paye = $paye;
-    }else if($taxable>=38893){
-    $paye = 6762+($taxable-38893)*30/100;
+    }else if($taxable>=42783){
+    $paye = 7438.11+($taxable-42783)*30/100;
     $paye = $paye;
     }else{
     $paye = 0.00;
@@ -1219,14 +1219,14 @@ public static $rules = [
     $total_nssf = static::nssfcalc($gross);
     $taxable = $total_pay-$total_nssf;
     
-    if($taxable>=11135.67 && $taxable<19741){
-    $paye = (1016.4+($taxable-10165)*15/100)-1162;
-    }else if($taxable>=19741 && $taxable<29317){
-    $paye = (2452.8+($taxable-19741)*20/100)-1162;
-    }else if($taxable>=29317 && $taxable<38893){
-    $paye = (4368+($taxable-29317)*25/100)-1162;
-    }else if($taxable>=38893){
-    $paye = (6762+($taxable-38893)*30/100)-1162;
+    if($taxable>=11180 && $taxable<21715){
+    $paye = (1118+($taxable-11180)*15/100)-1280;
+    }else if($taxable>=21715 && $taxable<32249){
+    $paye = (2698.03+($taxable-21715)*20/100)-1280;
+    }else if($taxable>=32249 && $taxable<42783){
+    $paye = (4804.73+($taxable-32249)*25/100)-1280;
+    }else if($taxable>=42783){
+    $paye = (7438.11+($taxable-42783)*30/100)-1280;
     }else{
     $paye = 0.00;
     }
@@ -1274,7 +1274,7 @@ public static $rules = [
 
     }
 
-     public static function payencalc($net){
+    public static function payencalc($net){
     $paye = 0.00;
     $a = str_replace( ',', '', $net);
 
@@ -1282,14 +1282,14 @@ public static $rules = [
     $total_nssf = static::nssfncalc($net);
     $taxable = $total_pay-$total_nssf;
     
-    if($taxable>=11135.67 && $taxable<19741){
-    $paye = (1016.4+($taxable-10165)*15/100)-1162;
-    }else if($taxable>=19741 && $taxable<29317){
-    $paye = (2452.8+($taxable-19741)*20/100)-1162;
-    }else if($taxable>=29317 && $taxable<38893){
-    $paye = (4368+($taxable-29317)*25/100)-1162;
-    }else if($taxable>=38893){
-    $paye = (6762+($taxable-38893)*30/100)-1162;
+    if($taxable>=11180 && $taxable<21715){
+    $paye = (1118+($taxable-11180)*15/100)-1280;
+    }else if($taxable>=21715 && $taxable<32249){
+    $paye = (2698.03+($taxable-21715)*20/100)-1280;
+    }else if($taxable>=32249 && $taxable<42783){
+    $paye = (4804.73+($taxable-32249)*25/100)-1280;
+    }else if($taxable>=42783){
+    $paye = (7438.11+($taxable-42783)*30/100)-1280;
     }else{
     $paye = 0.00;
     }
@@ -1722,33 +1722,33 @@ public static $rules = [
     if($emp->income_tax_applicable=='0'){
     $paye=0.00;
     }else if($emp->income_tax_applicable=='1' && $emp->income_tax_relief_applicable=='1'){
-    if($taxable>=11135.67 && $taxable<19741){
-    $paye = 1016.4+($taxable-10165)*15/100;
+    if($taxable>=11180 && $taxable<21715){
+    $paye = 1118+($taxable-11180)*15/100;
     $paye = $paye;
-    }else if($taxable>=19741 && $taxable<29317){
-    $paye = 2452.8+($taxable-19741)*20/100;
+    }else if($taxable>=21715 && $taxable<32249){
+    $paye = 2698.03+($taxable-21715)*20/100;
     $paye = $paye;
-    }else if($taxable>=29317 && $taxable<38893){
-    $paye = 4368+($taxable-29317)*25/100;
+    }else if($taxable>=32249 && $taxable<42783){
+    $paye = 4804.73+($taxable-32249)*25/100;
     $paye = $paye;
-    }else if($taxable>=38893){
-    $paye = 6762+($taxable-38893)*30/100;
+    }else if($taxable>=42783){
+    $paye = 7438.11+($taxable-42783)*30/100;
     $paye = $paye;
     }else{
     $paye = 0.00;
     }
     }else if($emp->income_tax_applicable=='1' && $emp->income_tax_relief_applicable=='0'){
-    if($taxable>=11135.67 && $taxable<19741){
-    $paye = 1016.4+($taxable-10165)*15/100;
+    if($taxable>=11180 && $taxable<21715){
+    $paye = 1118+($taxable-11180)*15/100;
     $paye = $paye;
-    }else if($taxable>=19741 && $taxable<29317){
-    $paye = 2452.8+($taxable-19741)*20/100;
+    }else if($taxable>=21715 && $taxable<32249){
+    $paye = 2698.03+($taxable-21715)*20/100;
     $paye = $paye;
-    }else if($taxable>=29317 && $taxable<38893){
-    $paye = 4368+($taxable-29317)*25/100;
+    }else if($taxable>=32249 && $taxable<42783){
+    $paye = 4804.73+($taxable-32249)*25/100;
     $paye = $paye;
-    }else if($taxable>=38893){
-    $paye = 6762+($taxable-38893)*30/100;
+    }else if($taxable>=42783){
+    $paye = 7438.11+($taxable-42783)*30/100;
     $paye = $paye;
     }else{
     $paye = 0.00;

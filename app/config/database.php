@@ -57,7 +57,7 @@ return array(
 			'host'      => 'localhost',
 			'database'  => 'umashcok_umash',
 			'username'  => 'root',
-			'password'  => '!QAZ2wsx2010 ',
+			'password'  => '',
 			'port' => '3306',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',

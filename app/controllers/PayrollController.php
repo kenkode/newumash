@@ -514,14 +514,14 @@ class PayrollController extends \BaseController {
 
     $taxable = $gross-$nssf1;
     
-    if($taxable>=11135.67 && $taxable<19741){
-    $paye1 = (1016.4+($taxable-10165)*15/100)-1162;
-    }else if($taxable>=19741 && $taxable<29317){
-    $paye1 = (2452.8+($taxable-19741)*20/100)-1162;
-    }else if($taxable>=29317 && $taxable<38893){
-    $paye1 = (4368+($taxable-29317)*25/100)-1162;
-    }else if($taxable>=38893){
-    $paye1 = (6762+($taxable-38893)*30/100)-1162;
+    if($taxable>=11180 && $taxable<21715){
+    $paye1 = (1118+($taxable-11180)*15/100)-1280;
+    }else if($taxable>=21715 && $taxable<32249){
+    $paye1 = (2698.03+($taxable-21715)*20/100)-1280;
+    }else if($taxable>=32249 && $taxable<42783){
+    $paye1 = (4804.73+($taxable-32249)*25/100)-1280;
+    }else if($taxable>=42783){
+    $paye1 = (7438.11+($taxable-42783)*30/100)-1280;
     }else{
     $paye1 = 0.00;
     }
