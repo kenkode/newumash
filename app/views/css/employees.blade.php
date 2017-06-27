@@ -66,7 +66,7 @@
 
         <?php $i = 1; ?>
         @foreach($employees as $employee)
-
+        @if($employee->in_employment == 'Y')
         <tr>
 
           <td> {{ $i }}</td>
@@ -103,6 +103,45 @@
 
 
         </tr>
+
+        @else
+        <tr style="color: red">
+
+          <td> {{ $i }}</td>
+          <td>{{ $employee->personal_file_number }}</td>
+          <td>{{ $employee->first_name.' '.$employee->middle_name.' '.$employee->last_name.' (Deactive Employee)' }}</td>
+     
+           <td>
+
+                  <div class="btn-group">
+                  <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    Action <span class="caret"></span>
+                  </button>
+          
+                  <ul class="dropdown-menu" role="menu">
+                      @if($employee->is_css_active == false)
+                    <li><a href="{{URL::to('portal/activate/'.$employee->id)}}">Activate</a></li>
+                  
+                        @endif
+                   
+                           @if($employee->is_css_active == true)
+                    <li><a href="{{URL::to('portal/deactivate/'.$employee->id)}}">Deactivate</a></li>
+ @endif
+                    
+
+                    <li><a href="{{URL::to('css/reset/'.$employee->id)}}">Reset Password</a></li>
+                    
+                  </ul>
+              </div>
+
+                    </td>
+
+
+
+
+
+        </tr>
+        @endif
 
         <?php $i++; ?>
         @endforeach

@@ -13,7 +13,7 @@ class EarningsController extends \BaseController {
 		          ->join('earnings', 'employee.id', '=', 'earnings.employee_id')
 		          ->join('earningsettings', 'earnings.earning_id', '=', 'earningsettings.id')
 		          ->where('in_employment','=','Y')
-		          ->select('earnings.id','first_name','middle_name','last_name','earnings_amount','earning_name')
+		          ->select('earnings.id','first_name','middle_name','last_name','earnings_amount','earning_name','earning_date')
 		          ->get();
 
 		Audit::logaudit('Earnings', 'view', 'viewed earnings');

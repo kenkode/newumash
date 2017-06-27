@@ -51,6 +51,7 @@ function asMoney($value) {
         <th>#</th>
         <th>Employee</th>
         <th>Non taxable income</th>
+        <th>Date</th>
         <th>Amount</th>
         <th>Action</th>
 
@@ -61,6 +62,7 @@ function asMoney($value) {
         <th>#</th>
         <th>Employee</th>
         <th>Non taxable income</th>
+        <th>Date</th>
         <th>Amount</th>
 
       </tfoot>
@@ -79,6 +81,7 @@ function asMoney($value) {
           <td>{{ $nontaxable->first_name.' '.$nontaxable->middle_name.' '.$nontaxable->last_name }}</td>
           @endif
           <td>{{ $nontaxable->name }}</td>
+          <td>{{ $nontaxable->nontaxable_date}}</td>
           <td align="right">{{ asMoney((double)$nontaxable->nontaxable_amount) }}</td>
           <td>
 

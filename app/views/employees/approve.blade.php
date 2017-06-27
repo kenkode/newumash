@@ -1,8 +1,7 @@
-@extends('layouts.organization')
+@extends('layouts.main')
 @section('content')
 <br/>
 <?php
-
 
 
 function asMoney($value) {
@@ -14,8 +13,8 @@ function asMoney($value) {
 <div class="row">
 	<div class="col-lg-12">
 
-<a class="btn btn-info btn-sm "  href="{{ URL::to('employees/edit/'.$employee->id)}}">update details</a>
-<a class="btn btn-success btn-sm " href="{{URL::to('employees/activate/'.$employee->id)}}" onclick="return (confirm('Are you sure you want to deactivate this employee?'))">Activate</a>
+
+<a class="btn btn-info btn-sm "  href="{{ URL::to('employees/doApprove/'.$employee->id)}}" onclick="return (confirm('Are you sure you want to approve this employee?'))">Approve Employee</a>
 
 <hr>
 </div>	
@@ -195,14 +194,15 @@ function asMoney($value) {
         @else
         <td></td>
         @endif
-        </tr>
 
-        @if($employee->type_id == 2)
+       @if($employee->type_id == 2)
         <tr><td><strong> Start Date </strong></td><td> {{ $employee->start_date}}</td></tr>
         <tr><td><strong> End Date </strong></td><td> {{ $employee->end_date}}</td></tr>
         @else
         
         @endif
+
+        </tr>
         
         <tr><td><strong>Work Permit: </strong></td>
         @if($employee->work_permit_number != null)
@@ -365,7 +365,7 @@ function asMoney($value) {
 </table>
 </div>
 
-<div class="col-lg-4">
+<div class="col-lg-4" >
 <table class="table table-bordered table-hover">
  <tr><td colspan="2"><strong><span style="color:green">Other Information</span></strong></td></tr>
  <tr><td><strong>Apply Tax:</strong></td>
@@ -390,7 +390,6 @@ function asMoney($value) {
         <td>No</td>
         @endif
         </tr>
-
         <tr><td><strong>Apply Nhif:</strong></td>
         @if($employee->hospital_insurance_applicable != null)
         <td>Yes</td>
@@ -415,7 +414,7 @@ function asMoney($value) {
           <div class="col-lg-12">
 
     <div class="panel panel-default">
-      
+     
         <div class="panel-body">
 
 
@@ -438,7 +437,7 @@ function asMoney($value) {
         <th>Kin Name</th>
          <th>ID Number</th>
          <th>Relationship</th>
-
+        
       </tfoot>
 
       <tbody>
@@ -509,7 +508,7 @@ function asMoney($value) {
     <div class="col-lg-12">
 
     <div class="panel panel-default">
-     
+      
         <div class="panel-body">
 
 
@@ -595,7 +594,7 @@ function asMoney($value) {
     <div class="col-lg-12">
 
     <div class="panel panel-default">
-      
+     
         <div class="panel-body">
 
 
@@ -618,7 +617,6 @@ function asMoney($value) {
         <th>Appraisal Question</th>
         <th>Performance</th>
         <th>Score</th>
-
       </tfoot>
 
       <tbody>
@@ -680,7 +678,7 @@ function asMoney($value) {
     <div class="col-lg-12">
 
     <div class="panel panel-default">
-      
+     
         <div class="panel-body">
 
 
@@ -702,7 +700,6 @@ function asMoney($value) {
         <th>#</th>
         <th>Name</th>
          <th>Amount</th>
-
       </tfoot>
 
       <tbody>
@@ -766,7 +763,7 @@ function asMoney($value) {
     <div class="col-lg-12">
 
     <div class="panel panel-default">
-      
+     
         <div class="panel-body">
 
 
@@ -806,7 +803,7 @@ function asMoney($value) {
           
                   <ul class="dropdown-menu" role="menu">
                     <li><a href="{{URL::to('occurences/view/'.$occurence->id)}}">View</a></li>
-                    
+
                     <li><a href="{{asset('/public/uploads/employees/documents/'.$occurence->doc_path) }}">Download</a></li>
                    
                     <li><a href="{{URL::to('occurences/delete/'.$occurence->id)}}" onclick="return (confirm('Are you sure you want to delete this employee`s occurence?'))">Delete</a></li>
@@ -837,7 +834,7 @@ function asMoney($value) {
     </div>
 
 
-  </div>
+	</div>
 
 
   <div role="tabpanel" class="tab-pane" id="benefits">

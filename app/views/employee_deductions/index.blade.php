@@ -51,6 +51,7 @@ function asMoney($value) {
         <th>#</th>
         <th>Employee</th>
         <th>Deduction Type</th>
+        <th>Date</th>
         <th>Amount</th>
         <th>Action</th>
 
@@ -60,6 +61,7 @@ function asMoney($value) {
 
         <th>#</th>
         <th>Employee</th>
+        <th>Date</th>
         <th>Deduction Type</th>
         <th>Amount</th>
 
@@ -79,6 +81,7 @@ function asMoney($value) {
           <td>{{ $ded->first_name.' '.$ded->middle_name.' '.$ded->last_name }}</td>
           @endif
           <td>{{ $ded->deduction_name }}</td>
+          <td>{{ $ded->deduction_date }}</td>
           <td align="right">{{ asMoney((double)$ded->deduction_amount) }}</td>
           <td>
 

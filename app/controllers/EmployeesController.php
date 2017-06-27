@@ -12,7 +12,18 @@ class EmployeesController extends \BaseController {
 		
 		$employees = Employee::getActiveEmployee();
 
+    $permission = DB::table('permission_role')
+                ->join('assigned_roles','permission_role.role_id','=','assigned_roles.role_id')
+                ->where('permission_id', '=', 28)
+                ->first();
+
 		 Audit::logaudit('Employees', 'view', 'viewed employee list');
+
+     if($permission->user_id == Confide::user()->id){
+        $employees = Employee::getAllEmployee();
+     }else{
+        $employees = Employee::getActiveEmployee();
+     }
 
 		return View::make('employees.index', compact('employees'));
 	}
@@ -340,6 +351,7 @@ class EmployeesController extends \BaseController {
         $employee->start_date = Input::get('startdate');
         $employee->end_date = Input::get('enddate');
 
+    $employee->is_approved = 0;
 		$employee->save();
 
     if(Input::get('supervisor') != null || Input::get('supervisor') != ""){
@@ -409,6 +421,14 @@ class EmployeesController extends \BaseController {
        $j=$j+1;
        }
        }
+
+       $email = Confide::user()->email;
+
+       Mail::send( 'emails.approveemployee', array('employee'=>$employee), function( $message ) use ($email)
+    {
+        
+        $message->to($email )->subject( 'Employee Approval' );
+    });
 
 		return Redirect::route('employees.index')->withFlashMessage('Employee successfully created!');
 		 }
@@ -798,6 +818,43 @@ class EmployeesController extends \BaseController {
 		return View::make('employees.view', compact('employee','appraisals','kins','documents','occurences','properties','count','benefits'));
 		
 	}
+
+
+  public function approve($id){
+
+    $employee = Employee::find($id);
+
+    $appraisals = Appraisal::where('employee_id', $id)->get();
+
+        $kins = Nextofkin::where('employee_id', $id)->get();
+
+        $occurences = Occurence::where('employee_id', $id)->get();
+
+        $properties = Property::where('employee_id', $id)->get();
+
+        $documents = Document::where('employee_id', $id)->get();
+
+        $benefits = Employeebenefit::where('jobgroup_id', $employee->job_group_id)->get();
+
+        $count = Employeebenefit::where('jobgroup_id', $employee->job_group_id)->count();
+
+    $organization = Organization::find(1);
+
+    return View::make('employees.approve', compact('employee','appraisals','kins','documents','occurences','properties','count','benefits'));
+    
+  }
+
+   public function doapprove($id){
+
+    $employee = Employee::find($id);
+
+    $employee->is_approved = 1;
+
+    $employee->update();
+
+    return Redirect::route('employees.index')->withFlashMessage('Employee successfully approved!');
+    
+  }
 
 	public function viewdeactive($id){
 

@@ -12,7 +12,7 @@ class OvertimesController extends \BaseController {
 		$overtimes = DB::table('employee')
 		          ->join('overtimes', 'employee.id', '=', 'overtimes.employee_id')
 		          ->where('in_employment','=','Y')
-		          ->select('overtimes.id','type','first_name','middle_name','last_name','amount','period')
+		          ->select('overtimes.id','type','first_name','middle_name','last_name','amount','period','overtime_date')
 		          ->get();
 
 		Audit::logaudit('Overtimes', 'view', 'viewed employee overtime');

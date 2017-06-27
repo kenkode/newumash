@@ -21,14 +21,39 @@ Route::get('/', function()
         return View::make('login',compact('organization'));
     }
 
+  $organization = Organization::find(1);
+  $datetime1 = strtotime(date('Y-m-d'));
+  $datetime2 = strtotime($organization->expiry_date);
 
+  $secs = $datetime2 - $datetime1;// == <seconds between the two times>
+  $days = $secs / 86400;
+
+  if($organization->expiry_date<=date('Y-m-d')){
+  $organization = Organization::find(1);
+  $message = "Your annual support has expired! Please contact Lixnet to renew your license";
+  return View::make('login',compact('organization','message'));
+  }else{
+
+  if($days<=5){
   if (Confide::user()) {
 
         return Redirect::to('/dashboard');
         } else {
           $organization = Organization::find(1);
-            return View::make('login',compact('organization'));
+          $message = "Your annual support license has ".$days." days to expire! Please contact Lixnet to renew your license";
+          return View::make('login',compact('organization','message'));
         }
+  }else{
+  if (Confide::user()) {
+
+        return Redirect::to('/dashboard');
+        } else {
+          $organization = Organization::find(1);
+          $message = "";
+            return View::make('login',compact('organization','message'));
+        }
+      }
+    }
 });
 
 
@@ -36,6 +61,56 @@ Route::get('/', function()
 
 Route::get('/dashboard', function()
 {
+
+  $organization = Organization::find(1);
+  $datetime1 = strtotime(date('Y-m-d'));
+  $datetime2 = strtotime($organization->expiry_date);
+
+  $secs = $datetime2 - $datetime1;// == <seconds between the two times>
+  $days = $secs / 86400;
+
+  if($organization->expiry_date<=date('Y-m-d')){
+  $organization = Organization::find(1);
+  $message = "Your annual support has expired! Please contact Lixnet to renew your license";
+  return View::make('login',compact('organization','message'));
+  }else{
+
+  if($days<=5){
+  if (Confide::user()) {
+  if(Confide::user()->user_type == 'admin'){
+
+             
+          $employees = Employee::getActiveEmployee();
+           return View::make('dashboard', compact('employees'));
+
+
+
+        } 
+
+
+        if(Confide::user()->user_type == 'member'){
+
+          $employee_id = DB::table('employee')->where('personal_file_number', '=', Confide::user()->username)->orWhere('email_office', '=', Confide::user()->email)->pluck('id');
+
+             
+          $employee = Employee::findorfail($employee_id);
+          $supervisor = Supervisor::where('employee_id',$employee_id)->first();
+
+          
+          $citizen_id=$employee->citizenship_id;
+          $citizenship_name=Citizenship::where('id',$citizen_id)->pluck('name');
+
+           return View::make('empdash', compact('supervisor','employee','citizenship_name'));
+
+
+
+        }
+        } else {
+          $organization = Organization::find(1);
+          $message = "Your annual support license has ".$days." days to expire! Please contact Lixnet to renew your license";
+          return View::make('login',compact('organization','message'));
+        }
+  }else{
 	if (Confide::user()) {
 
 
@@ -72,8 +147,11 @@ Route::get('/dashboard', function()
 
       
         } else {
-            return View::make('login');
+            $message = "";
+            return View::make('login',compact('organization','message'));
         }
+      }
+    }
 });
 //
 
@@ -83,6 +161,12 @@ Route::get('fpassword', function(){
 
 });
 // Confide routes
+
+Route::get('users/forgot_password',function(){
+  $organization=DB::table('organizations')->where('id','=',1)->first();
+  return View::make('forgot',compact('organization'));
+});
+
 Route::resource('users', 'UsersController');
 Route::get('users/create', 'UsersController@create');
 Route::get('users/edit/{user}', 'UsersController@edit');
@@ -93,7 +177,7 @@ Route::post('users/newuser', 'UsersController@newuser');
 Route::get('users/login', 'UsersController@login');
 Route::post('users/login', 'UsersController@doLogin');
 Route::get('users/confirm/{code}', 'UsersController@confirm');
-Route::get('users/forgot_password', 'UsersController@forgotPassword');
+//Route::get('users/forgot_password', 'UsersController@forgotPassword');
 Route::post('users/forgot_password', 'UsersController@doForgotPassword');
 Route::get('users/reset_password/{token}', 'UsersController@resetPassword');
 Route::post('users/reset_password', 'UsersController@doResetPassword');
@@ -1641,6 +1725,8 @@ Route::get('employees/deactivate/{id}', 'EmployeesController@deactivate');
 Route::get('employees/activate/{id}', 'EmployeesController@activate');
 Route::get('employees/edit/{id}', 'EmployeesController@edit');
 Route::get('employees/view/{id}', 'EmployeesController@view');
+Route::get('employees/approve/{id}', 'EmployeesController@approve');
+Route::get('employees/doApprove/{id}', 'EmployeesController@doapprove');
 Route::get('employees/viewdeactive/{id}', 'EmployeesController@viewdeactive');
 
 Route::post('createCitizenship', 'EmployeesController@createcitizenship');

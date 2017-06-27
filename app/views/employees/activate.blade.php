@@ -109,6 +109,8 @@
                   <ul class="dropdown-menu" style="margin-left:0px" role="menu">
 
                     <li><a href="{{URL::to('employees/viewdeactive/'.$employee->id)}}">View</a></li>
+
+                    <li><a href="{{URL::to('employees/edit/'.$employee->id)}}">Update</a></li>
                    
                     <li><a href="{{URL::to('employees/activate/'.$employee->id)}}" onclick="return (confirm('Are you sure you want to activate this employee?'))">Activate</a></li>
                     

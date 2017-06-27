@@ -13,7 +13,7 @@ class EmployeeAllowancesController extends \BaseController {
 		          ->join('employee', 'employee_allowances.employee_id', '=', 'employee.id')
 		          ->join('allowances', 'employee_allowances.allowance_id', '=', 'allowances.id')
 		          ->where('in_employment','=','Y')
-		          ->select('employee_allowances.id','first_name','middle_name','last_name','allowance_amount','allowance_name')
+		          ->select('employee_allowances.id','first_name','middle_name','last_name','allowance_amount','allowance_name','allowance_date')
 		          ->get();
 
 		Audit::logaudit('Employee Allowances', 'view', 'viewed employee allowances');

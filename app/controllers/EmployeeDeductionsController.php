@@ -13,7 +13,7 @@ class EmployeeDeductionsController extends \BaseController {
 		          ->join('employee_deductions', 'employee.id', '=', 'employee_deductions.employee_id')
 		          ->join('deductions', 'employee_deductions.deduction_id', '=', 'deductions.id')
 		          ->where('in_employment','=','Y')
-		          ->select('employee_deductions.id','first_name','middle_name','last_name','deduction_amount','deduction_name')
+		          ->select('employee_deductions.id','first_name','middle_name','last_name','deduction_amount','deduction_name','deduction_date')
 		          ->get();
 		return View::make('employee_deductions.index', compact('deds'));
 	}

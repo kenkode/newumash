@@ -153,7 +153,7 @@ class UserRepository
     public function resetPassword($input)
     {
         $result = false;
-        $user   = User::find(Confide::user()->id);
+        $user   = User::where('token',$input['_token'])->first();
 
         if ($user) {
             $user->password              = $input['password'];

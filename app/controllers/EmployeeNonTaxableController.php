@@ -13,7 +13,7 @@ class EmployeeNonTaxableController extends \BaseController {
 		          ->join('employeenontaxables', 'employee.id', '=', 'employeenontaxables.employee_id')
 		          ->join('nontaxables', 'employeenontaxables.nontaxable_id', '=', 'nontaxables.id')
 		          ->where('in_employment','=','Y')
-		          ->select('employeenontaxables.id','first_name','middle_name','last_name','nontaxable_amount','name')
+		          ->select('employeenontaxables.id','first_name','middle_name','last_name','nontaxable_amount','name','nontaxable_date')
 		          ->get();
 		return View::make('employeenontaxables.index', compact('nontaxables'));
 	}

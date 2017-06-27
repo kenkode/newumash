@@ -176,6 +176,13 @@ class Employee extends Eloquent {
 
     public static function getActiveEmployee(){
 
+		$employee = DB::table('employee')->where('in_employment', '=', 'Y')->where('is_approved',1)->get();
+
+		return $employee;
+	}
+
+	public static function getAllEmployee(){
+
 		$employee = DB::table('employee')->where('in_employment', '=', 'Y')->get();
 
 		return $employee;

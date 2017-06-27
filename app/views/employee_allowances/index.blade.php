@@ -52,6 +52,7 @@ function asMoney($value) {
         <th>#</th>
         <th>Employee</th>
         <th>Allowance Type</th>
+        <th>Date</th>
         <th>Amount</th>
         <th>Action</th>
 
@@ -62,6 +63,7 @@ function asMoney($value) {
         <th>#</th>
         <th>Employee</th>
         <th>Allowance Type</th>
+        <th>Date</th>
         <th>Amount</th>
 
       </tfoot>
@@ -80,6 +82,7 @@ function asMoney($value) {
           <td>{{ $eallw->first_name.' '.$eallw->middle_name.' '.$eallw->last_name }}</td>
           @endif
           <td>{{ $eallw->allowance_name }}</td>
+          <td>{{ $eallw->allowance_date }}</td>
           <td align="right">{{ asMoney((double)$eallw->allowance_amount) }}</td>
           <td>
 
