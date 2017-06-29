@@ -9,7 +9,8 @@ class payslipEmailController extends \BaseController {
      */
     public function index()
     {
-        $employees = Employee::all();
+        $employees = Employee::where('in_employment','=','Y')
+                   ->where('is_approved','=','1')->get();
         return View::make('payslips.index',compact('employees'));
     }
 
@@ -17,7 +18,8 @@ class payslipEmailController extends \BaseController {
     {
         if(!empty(Input::get('sel'))){
         $period = Input::get('period');
-        $employees = Employee::all();
+        $employees = Employee::where('in_employment','=','Y')
+                   ->where('is_approved','=','1')->get();
         $select = Input::get("employeeid");
        
         $emps = DB::table('employee')->count();
@@ -151,7 +153,8 @@ class payslipEmailController extends \BaseController {
      return Redirect::back()->with('success', 'Email Sent!');
     }else if(empty(Input::get('sel')) && !empty(Input::get('employeeid'))){
         $period = Input::get('period');
-        $employees = Employee::all();
+        $employees = Employee::where('in_employment','=','Y')
+                   ->where('is_approved','=','1')->get();
        
         $emps = DB::table('employee')->count();
         

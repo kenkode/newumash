@@ -12,6 +12,7 @@ class OccurencesController extends \BaseController {
 		$occurences = DB::table('employee')
 		          ->join('occurences', 'employee.id', '=', 'occurences.employee_id')
 		          ->where('in_employment','=','Y')
+		           ->where('is_approved','=','1')
 		          ->get();
         Audit::logaudit('Occurences', 'view', 'viewed occurences');
 
@@ -27,6 +28,7 @@ class OccurencesController extends \BaseController {
 	{
 		$employees = DB::table('employee')
 		          ->where('in_employment','=','Y')
+		           ->where('is_approved','=','1')
 		          ->get();
 		$occurences = Occurencesetting::all();
 		return View::make('occurences.create',compact('employees','occurences'));
@@ -123,7 +125,8 @@ class OccurencesController extends \BaseController {
 
 		$occurencesettings = Occurencesetting::all();
 
-		$employees = Employee::all();
+		$employees = Employee::where('in_employment','=','Y')
+		           ->where('is_approved','=','1');
 
 		return View::make('occurences.edit', compact('occurence','employees','occurencesettings'));
 	}

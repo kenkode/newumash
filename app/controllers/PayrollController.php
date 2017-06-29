@@ -42,6 +42,7 @@ class PayrollController extends \BaseController {
 
         $employees = DB::table('employee')
                   ->where('in_employment','=','Y')
+               ->where('is_approved','=','1')
                   ->get();
 
         $earnings = Earningsetting::all();
@@ -71,6 +72,7 @@ class PayrollController extends \BaseController {
     public function create()
     {
         $employees = DB::table('employee')
+               ->where('is_approved','=','1')
                   ->where('in_employment','=','Y')
                   ->get();
         $period = Input::get('period');
@@ -170,7 +172,7 @@ class PayrollController extends \BaseController {
         $paye = number_format(Payroll::payecalc($gross),2);
         $nssf = number_format(Payroll::nssfcalc($gross),2);
         $nhif = number_format(Payroll::nhifcalc($gross),2);
-        $net  = Payroll::asMoney(Payroll::netcalc($gross));
+        $net  = Payroll::asMoney(Payroll::ncalc($gross));
 
          return json_encode(["paye"=>$paye,"nssf"=>$nssf,"nhif"=>$nhif,"net"=>$net,"gross"=>number_format($gross, 2)]);
         //echo json_encode(array("paye"=>$paye,"nssf"=>$nssf,"nhif"=>$nhif));
@@ -735,6 +737,7 @@ $display .="
       $fperiod   = $part1.$part2.$part3; 
       $employees = DB::table('employee')
                   ->where('in_employment','=','Y')
+               ->where('is_approved','=','1')
                   ->get();
         
         $i=1;
@@ -899,6 +902,7 @@ $display .="
     {
         $employees = DB::table('employee')
                   ->where('in_employment','=','Y')
+               ->where('is_approved','=','1')
                   ->get();
 
         foreach ($employees as $employee) {
@@ -930,6 +934,7 @@ $display .="
             ->join('employee', 'employee_allowances.employee_id', '=', 'employee.id')
             ->where('instalments','>',0)
             ->where('in_employment','Y')
+               ->where('is_approved','=','1')
             ->where(function ($query) use ($start){
                        $query->where('formular', '=', 'Recurring')
                              ->where('first_day_month','<=',$start);
@@ -946,6 +951,7 @@ $display .="
             ->join('employee', 'employee_allowances.employee_id', '=', 'employee.id')
             ->where('instalments','>',0)
             ->where('in_employment','Y')
+               ->where('is_approved','=','1')
             ->where(function ($query) use ($start){
                        $query->where('formular', '=', 'Recurring')
                              ->where('first_day_month','<=',$start);
@@ -986,6 +992,7 @@ $display .="
             ->join('employee', 'employeenontaxables.employee_id', '=', 'employee.id')
             ->where('instalments','>',0)
             ->where('in_employment','Y')
+               ->where('is_approved','=','1')
             ->where(function ($query) use ($start){
                        $query->where('formular', '=', 'Recurring')
                              ->where('first_day_month','<=',$start);
@@ -1002,6 +1009,7 @@ $display .="
             ->join('employee', 'employeenontaxables.employee_id', '=', 'employee.id')
             ->where('instalments','>',0)
             ->where('in_employment','Y')
+               ->where('is_approved','=','1')
             ->where(function ($query) use ($start){
                        $query->where('formular', '=', 'Recurring')
                              ->where('first_day_month','<=',$start);
@@ -1041,6 +1049,7 @@ $display .="
             ->join('employee', 'employee_deductions.employee_id', '=', 'employee.id')
             ->where('instalments','>',0)
             ->where('in_employment','Y')
+               ->where('is_approved','=','1')
             ->where(function ($query) use ($start){
                        $query->where('formular', '=', 'Recurring')
                              ->where('first_day_month','<=',$start);
@@ -1057,6 +1066,7 @@ $display .="
             ->join('employee', 'employee_deductions.employee_id', '=', 'employee.id')
             ->where('instalments','>',0)
             ->where('in_employment','Y')
+               ->where('is_approved','=','1')
             ->where(function ($query) use ($start){
                        $query->where('formular', '=', 'Recurring')
                              ->where('first_day_month','<=',$start);
@@ -1097,6 +1107,7 @@ $display .="
             ->join('earningsettings', 'earnings.earning_id', '=', 'earningsettings.id')
             ->where('instalments','>',0)
             ->where('in_employment','Y')
+            ->where('is_approved','=','1')
             ->where(function ($query) use ($start){
                        $query->where('formular', '=', 'Recurring')
                              ->where('first_day_month','<=',$start);
@@ -1113,6 +1124,7 @@ $display .="
             ->join('earningsettings', 'earnings.earning_id', '=', 'earningsettings.id')
             ->where('instalments','>',0)
             ->where('in_employment','Y')
+            ->where('is_approved','=','1')
             ->where(function ($query) use ($start){
                        $query->where('formular', '=', 'Recurring')
                              ->where('first_day_month','<=',$start);
@@ -1150,6 +1162,7 @@ $display .="
             ->join('employee', 'overtimes.employee_id', '=', 'employee.id')
             ->where('instalments','>',0)
             ->where('in_employment','Y')
+            ->where('is_approved','=','1')
             ->where(function ($query) use ($start){
                        $query->where('formular', '=', 'Recurring')
                              ->where('first_day_month','<=',$start);
@@ -1165,6 +1178,7 @@ $display .="
             ->join('employee', 'overtimes.employee_id', '=', 'employee.id')
             ->where('instalments','>',0)
             ->where('in_employment','Y')
+               ->where('is_approved','=','1')
             ->where(function ($query) use ($start){
                        $query->where('formular', '=', 'Recurring')
                              ->where('first_day_month','<=',$start);
@@ -1204,6 +1218,7 @@ $display .="
             ->join('relief', 'employee_relief.relief_id', '=', 'relief.id')
             ->join('employee', 'employee_relief.employee_id', '=', 'employee.id')
             ->where('in_employment','Y')
+               ->where('is_approved','=','1')
             ->select('employee.id as eid','employee_relief.id as id','relief_name','relief_id','relief_amount')
             ->get();
 
@@ -1223,6 +1238,7 @@ $display .="
         $account = Input::get('account'); 
         $employees = DB::table('employee')
                   ->where('in_employment','=','Y')
+                  ->where('is_approved','=','1')
                   ->get();
         $period = Input::get('period');
         $account = Input::get('account');

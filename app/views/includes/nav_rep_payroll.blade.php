@@ -43,6 +43,10 @@
 
                     <li>
                         <a href="{{ URL::to('payrollReports/selectDeduction') }}" target="_blank"><i class="glyphicon glyphicon-file fa-fw"></i> Deduction Report</a>
+                    </li> 
+
+                    <li>
+                        <a href="{{ URL::to('payrollReports/selectRelief') }}" target="_blank"><i class="glyphicon glyphicon-file fa-fw"></i> Relief Report</a>
                     </li>  
 
                     

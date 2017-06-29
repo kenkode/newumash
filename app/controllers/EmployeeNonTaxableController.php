@@ -13,6 +13,7 @@ class EmployeeNonTaxableController extends \BaseController {
 		          ->join('employeenontaxables', 'employee.id', '=', 'employeenontaxables.employee_id')
 		          ->join('nontaxables', 'employeenontaxables.nontaxable_id', '=', 'nontaxables.id')
 		          ->where('in_employment','=','Y')
+		          ->where('is_approved','=','1')
 		          ->select('employeenontaxables.id','first_name','middle_name','last_name','nontaxable_amount','name','nontaxable_date')
 		          ->get();
 		return View::make('employeenontaxables.index', compact('nontaxables'));
@@ -28,6 +29,7 @@ class EmployeeNonTaxableController extends \BaseController {
 	{
 		$employees = DB::table('employee')
 		          ->where('in_employment','=','Y')
+		           ->where('is_approved','=','1')
 		          ->get();
 		$nontaxables = Nontaxable::all();
 		$currency = Currency::find(1);
@@ -144,7 +146,8 @@ class EmployeeNonTaxableController extends \BaseController {
 	public function edit($id)
 	{
 		$nontax = Employeenontaxable::find($id);
-		$employees = Employee::all();
+		$employees = Employee::where('in_employment','=','Y')
+		           ->where('is_approved','=','1')->get();
         $nontaxables = Nontaxable::all();
         $currency = Currency::find(1);
 		return View::make('employeenontaxables.edit', compact('nontax','employees','nontaxables','currency'));

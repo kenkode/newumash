@@ -12,14 +12,9 @@ class EmployeesController extends \BaseController {
 		
 		$employees = Employee::getActiveEmployee();
 
-    $permission = DB::table('permission_role')
-                ->join('assigned_roles','permission_role.role_id','=','assigned_roles.role_id')
-                ->where('permission_id', '=', 28)
-                ->first();
-
 		 Audit::logaudit('Employees', 'view', 'viewed employee list');
 
-     if($permission->user_id == Confide::user()->id){
+     if(Entrust::can('approve_employee')){
         $employees = Employee::getAllEmployee();
      }else{
         $employees = Employee::getActiveEmployee();
@@ -201,8 +196,10 @@ class EmployeesController extends \BaseController {
 		$bbranches = BBranch::all();
 		$educations = Education::all();
 		$citizenships = Citizenship::all();
+    $allowances = Allowance::all();
+    $deductions = Deduction::all();
 		$pfn = Employee::orderBy('id', 'DESC')->first();
-		return View::make('employees.create', compact('currency','employees','citizenships','pfn','branches','departments','etypes','jgroups','banks','bbranches','educations'));
+		return View::make('employees.create', compact('currency','employees','citizenships','pfn','branches','departments','etypes','jgroups','banks','bbranches','educations','allowances','deductions'));
 	}
 
 
@@ -497,7 +494,9 @@ class EmployeesController extends \BaseController {
     $supervisor = Supervisor::where('employee_id',$id)->first();
     $count = Supervisor::where('employee_id',$id)->count();
     $subordinates = Employee::all();
-		return View::make('employees.edit', compact('count','subordinates','supervisor','currency','countk','countd','docs','kins','citizenships','contract','branches','educations','departments','etypes','jgroups','banks','bbranches','employee'));
+    $allowances = Allowance::all();
+    $deductions = Deduction::all();
+		return View::make('employees.edit', compact('count','subordinates','supervisor','currency','countk','countd','docs','kins','citizenships','contract','branches','educations','departments','etypes','jgroups','banks','bbranches','employee','allowances','deductions'));
 	}
 
 	/**
@@ -879,6 +878,173 @@ class EmployeesController extends \BaseController {
 		return View::make('employees.viewdeactive', compact('employee','appraisals','kins','documents','occurences','properties','count','benefits'));
 		
 	}
+
+
+  public function disp(){
+      $display = "";
+      $postedit = Input::all();
+      parse_str(Input::get('formdata'), $postedit);
+      $salary = str_replace( ',', '', $postedit['salary']);
+      $gross = 0.00;
+      $allowances = 0.00;
+      $deductions = 0.00;
+
+
+      for($i=0;$i<count($postedit['allowance']);$i++){
+         $allowances = $allowances + str_replace( ',', '', $postedit['allowance'][$i]);
+      }
+
+      for($i=0;$i<count($postedit['deduction']);$i++){
+         $deductions = $deductions + str_replace( ',', '', $postedit['deduction'][$i]);
+      }
+
+      $gross = $gross + $salary + $allowances;
+
+        $paye = number_format(Payroll::payecalc($gross),2);
+        $nssf = number_format(Payroll::nssfcalc($gross),2);
+        $nhif = number_format(Payroll::nhifcalc($gross),2);
+        $totaldeductions = number_format(Payroll::dedcalc($gross,$deductions),2);
+        $net  = Payroll::asMoney(Payroll::netcalc($gross,$deductions));
+
+         return json_encode(["paye"=>$paye,"nssf"=>$nssf,"nhif"=>$nhif,"net"=>$net,"gross"=>number_format($gross, 2),"salary"=>number_format($salary, 2),"allowances"=>number_format($allowances, 2),"deductions"=>number_format($deductions, 2),"totaldeductions"=>$totaldeductions]);
+        //echo json_encode(array("paye"=>$paye,"nssf"=>$nssf,"nhif"=>$nhif));
+        //$net = number_format(Payroll::netcalc($employee->id,$fperiod),2);
+       /*
+
+        $display .="
+          <input class='form-control' placeholder='' type='text' name='gross' id='gross' value='$gross'>
+          <input readonly class='form-control' placeholder='' type='text' name='paye' id='paye' value='$paye'>
+          <input readonly class='form-control' placeholder='' type='text' name='nssf' id='nssf' value='$nssf'>
+          <input readonly class='form-control' placeholder='' type='text' name='nssf' id='nhif' value='$nhif'>
+          <input readonly class='form-control' placeholder='' type='text' name='net' id='net' value='0'>
+        
+        ";
+    
+        return $display;
+        exit();*/
+        $currency = Currency::find(1);
+        //return View::make('payroll.payroll_calculator', compact('gross','paye','nssf','nhif','currency'));
+
+
+        echo json_encode(array("paye"=>$paye,"nssf"=>$nssf,"nhif"=>$nhif));
+        //return $display;
+        exit();
+
+    }
+
+
+  public static function grosscalc($net){
+      
+        $total = 0;
+        $gross = $net;
+        $y =0 ;
+        $x =0 ;
+        
+        for($i=$net;$i>0;$i--){
+        
+        $total = $net-static::payencalc($net)-static::nssfncalc($net)-static::nhifncalc($net);
+      
+        $gross=($gross-$total)+$net;
+        $net=$total;
+        $y=$x;
+        $x=($gross-$net)/2;
+        $i=$x-$y;
+        }
+
+    return round($gross,2);
+
+    }
+
+    public function dispgross(){
+      $display = "";
+      $postedit = Input::all();
+      parse_str(Input::get('formdata'), $postedit);
+      $net = str_replace( ',', '', $postedit['net1']);
+      //print_r($searcharray['net1']); 
+
+       $total = 0;
+        $gross = $net;
+        $y =0 ;
+        $x =0 ;
+        $a =0 ;
+        $z =  str_replace( ',', '', $postedit['net1']);
+
+
+        $paye1 = 0;
+        $nssf1 = 0;
+        $nhif1 = 0;
+        $salary = 0;
+        $allowances = 0;
+        $deductions = 0;
+        $totded = 0;
+
+        for($i=0;$i<count($postedit['netallowance']);$i++){
+         $allowances = $allowances + str_replace( ',', '', $postedit['netallowance'][$i]);
+        }
+
+        for($i=0;$i<count($postedit['netdeduction']);$i++){
+         $deductions = $deductions + str_replace( ',', '', $postedit['netdeduction'][$i]);
+        } 
+        
+    for($i=$net;;$i--){
+
+    $gross = $gross;
+
+    $nssf1 = DB::table('social_security')->whereRaw($gross.' between income_from and income_to')->pluck('ss_amount_employee');
+    
+    $nhif1 = DB::table('hospital_insurance')->whereRaw($gross.' between income_from and income_to')->pluck('hi_amount'); 
+
+    $taxable = $gross-$nssf1;
+    
+    if($taxable>=11180 && $taxable<21715){
+    $paye1 = (1118+($taxable-11180)*15/100)-1280;
+    }else if($taxable>=21715 && $taxable<32249){
+    $paye1 = (2698.03+($taxable-21715)*20/100)-1280;
+    }else if($taxable>=32249 && $taxable<42783){
+    $paye1 = (4804.73+($taxable-32249)*25/100)-1280;
+    }else if($taxable>=42783){
+    $paye1 = (7438.11+($taxable-42783)*30/100)-1280;
+    }else{
+    $paye1 = 0.00;
+    }
+
+    $total = $net-$paye1-$nssf1-$nhif1-$deductions;  
+    $gross=($z-$total)+$net;
+    $net=$total;
+    $y=$x;
+    $x=($gross-$net)/2;
+    if($net+$x == 40000){
+    $i=($x-$y);
+    }else{
+    if(round($a-($x-$y),2) == 0){
+      if($gross<0){
+        $gross = 0;
+      }else{
+        $gross=$gross;
+        $salary = $gross - $allowances;
+        $totded = $paye1+$nssf1+$nhif1+$deductions;  
+      }
+      break;
+    }else{
+    $i=$a-($x-$y);
+    }
+    }
+    $a= ($x-$y);
+    //echo $gross.'<br>';
+    }
+
+
+   // echo $nssf1;
+        //return $display;
+
+     return json_encode(["paye1"=>number_format($paye1,2),"nssf1"=>number_format($nssf1,2),"nhif1"=>number_format($nhif1,2),"netv"=>number_format($z,2),"gross1"=>number_format($gross, 2),"salary1"=>number_format($salary, 2),"netded"=>number_format($totded, 2)]);
+     
+        //$net = number_format(Payroll::netcalc($employee->id,$fperiod),2);
+
+   $currency = Currency::find(1);
+        
+
+    }
 
 	
 }

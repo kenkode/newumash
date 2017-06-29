@@ -83,6 +83,7 @@ public static $rules = [
     $allw = DB::table('employee_allowances')
                      ->join('employee', 'employee_allowances.employee_id', '=', 'employee.id')
                      ->where('in_employment','Y')
+               ->where('is_approved','=','1')
                      ->where(function ($query) use ($allowance_id,$start){
                        $query->where('allowance_id', '=', $allowance_id)
                              ->where('formular', '=', 'Recurring')
@@ -169,6 +170,7 @@ public static $rules = [
     $nontaxable = DB::table('employeenontaxables')
                      ->join('employee', 'employeenontaxables.employee_id', '=', 'employee.id')
                      ->where('in_employment','Y')
+                     ->where('is_approved','=','1')
                      ->where(function ($query) use ($nontaxable_id,$start){
                        $query->where('nontaxable_id', '=', $nontaxable_id)
                              ->where('formular', '=', 'Recurring')
@@ -304,6 +306,7 @@ public static $rules = [
                      ->join('employee', 'earnings.employee_id', '=', 'employee.id')
                      ->select(DB::raw('COALESCE(sum(earnings_amount),0.00) as total_earnings,instalments'))
                      ->where('in_employment','Y')
+                     ->where('is_approved','=','1')
                      ->where(function ($query) use ($earning_id,$start){
                        $query->where('earning_id', '=', $earning_id)
                              ->where('formular', '=', 'Recurring')
@@ -421,6 +424,7 @@ public static $rules = [
     $otime = DB::table('overtimes')
                      ->join('employee', 'overtimes.employee_id', '=', 'employee.id')
                      ->where('in_employment','Y')
+                     ->where('is_approved','=','1')
                      ->where(function ($query) use ($overtime,$start){
                        $query->where('type', '=', $overtime)
                              ->where('formular', '=', 'Recurring')
@@ -717,6 +721,7 @@ public static $rules = [
                      ->join('employee', 'employee_deductions.employee_id', '=', 'employee.id')
                      ->select(DB::raw('COALESCE(sum(deduction_amount),0.00) as total_deduction,instalments')) 
                      ->where('in_employment','Y')
+                     ->where('is_approved','=','1')
                      ->where(function ($query) use ($deduction_id,$start){
                        $query->where('deduction_id', '=', $deduction_id)
                              ->where('formular', '=', 'Recurring')
@@ -1265,7 +1270,25 @@ public static $rules = [
     return round($nhifAmt,2);
    }
 
-    public static function netcalc($gross){
+   public static function dedcalc($gross,$deductions){
+    $total_ded = 0.00;
+    
+    $total_ded =static::payecalc($gross)+static::nssfcalc($gross)+static::nhifcalc($gross)+$deductions;
+
+    return round($total_ded,2);
+
+    }
+
+    public static function netcalc($gross,$deductions){
+    $total_net = 0.00;
+    
+    $total_net = $gross-static::payecalc($gross)-static::nssfcalc($gross)-static::nhifcalc($gross)-$deductions;
+
+    return round($total_net,2);
+
+    }
+
+    public static function ncalc($gross){
     $total_net = 0.00;
     
     $total_net = $gross-static::payecalc($gross)-static::nssfcalc($gross)-static::nhifcalc($gross);

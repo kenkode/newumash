@@ -41,7 +41,8 @@ class LeaveapplicationsController extends \BaseController {
 	 */
 	public function create()
 	{
-		$employees = Employee::all();
+		$employees = Employee::where('in_employment','=','Y')
+		           ->where('is_approved','=','1')->get();
 
 		$leavetypes = Leavetype::all();
 
@@ -114,7 +115,8 @@ class LeaveapplicationsController extends \BaseController {
 	{
 		$leaveapplication = Leaveapplication::find($id);
 
-		$employees = Employee::all();
+		$employees = Employee::where('in_employment','=','Y')
+		           ->where('is_approved','=','1')->get();
 
 		$leavetypes = Leavetype::all();
 

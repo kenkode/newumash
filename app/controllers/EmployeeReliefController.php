@@ -13,6 +13,7 @@ class EmployeeReliefController extends \BaseController {
 		          ->join('employee_relief', 'employee.id', '=', 'employee_relief.employee_id')
 		          ->join('relief', 'employee_relief.relief_id', '=', 'relief.id')
 		          ->where('in_employment','=','Y')
+		          ->where('is_approved','=','1')
 		          ->select('employee_relief.id','first_name','middle_name','last_name','relief_amount','relief_name')
 		          ->get();
 		Audit::logaudit('Employee Reliefs', 'view', 'viewed employee relief');
@@ -29,6 +30,7 @@ class EmployeeReliefController extends \BaseController {
 		
 		$employees = DB::table('employee')
 		          ->where('in_employment','=','Y')
+		           ->where('is_approved','=','1')
 		          ->get();
 		$reliefs = Relief::all();
 		$currency = Currency::find(1);
@@ -109,7 +111,8 @@ class EmployeeReliefController extends \BaseController {
 	{
 		
 		$rel = ERelief::find($id);
-		$employees = Employee::all();
+		$employees = Employee::where('in_employment','=','Y')
+		           ->where('is_approved','=','1')->get();
         $reliefs = Relief::all();
         $currency = Currency::find(1);
 		return View::make('employee_relief.edit', compact('rel','employees','reliefs','currency'));

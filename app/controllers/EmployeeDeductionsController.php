@@ -13,6 +13,7 @@ class EmployeeDeductionsController extends \BaseController {
 		          ->join('employee_deductions', 'employee.id', '=', 'employee_deductions.employee_id')
 		          ->join('deductions', 'employee_deductions.deduction_id', '=', 'deductions.id')
 		          ->where('in_employment','=','Y')
+		          ->where('is_approved','=','1')
 		          ->select('employee_deductions.id','first_name','middle_name','last_name','deduction_amount','deduction_name','deduction_date')
 		          ->get();
 		return View::make('employee_deductions.index', compact('deds'));
@@ -28,6 +29,7 @@ class EmployeeDeductionsController extends \BaseController {
 	{
 		$employees = DB::table('employee')
 		          ->where('in_employment','=','Y')
+		           ->where('is_approved','=','1')
 		          ->get();
 		$deductions = Deduction::all();
 		$currency = Currency::find(1);
@@ -150,7 +152,8 @@ class EmployeeDeductionsController extends \BaseController {
 	public function edit($id)
 	{
 		$ded = EDeduction::find($id);
-		$employees = Employee::all();
+		$employees = Employee::where('in_employment','=','Y')
+		           ->where('is_approved','=','1')->get();
         $deductions = Deduction::all();
         $currency = Currency::find(1);
 		return View::make('employee_deductions.edit', compact('ded','employees','deductions','currency'));

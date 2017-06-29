@@ -173,7 +173,7 @@ $(document).ready(function(){
         <label for="username">Net:</label>
         <div class="input-group">
             <span class="input-group-addon">{{$currency->shortname}}</span>
-         <input readonly class="form-control" placeholder="" type="text" name="net" id="net" value="{{Payroll::asMoney(Payroll::netcalc($a))}}">
+         <input readonly class="form-control" placeholder="" type="text" name="net" id="net" value="{{Payroll::asMoney(Payroll::ncalc($a))}}">
         </div>
       </div>
 

@@ -1830,6 +1830,8 @@ Route::post('deleterow', 'PayrollController@del_exist');
 Route::post('showrecord', 'PayrollController@display');
 Route::post('shownet', 'PayrollController@disp');
 Route::post('showgross', 'PayrollController@dispgross');
+Route::post('employee/shownet', 'EmployeesController@disp');
+Route::post('employee/showgross', 'EmployeesController@dispgross');
 Route::post('payroll/preview', 'PayrollController@create');
 Route::get('payrollpreviewprint/{period}', 'PayrollController@previewprint');
 Route::post('createNewAccount', 'PayrollController@createaccount');

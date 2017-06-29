@@ -13,6 +13,7 @@ class EarningsController extends \BaseController {
 		          ->join('earnings', 'employee.id', '=', 'earnings.employee_id')
 		          ->join('earningsettings', 'earnings.earning_id', '=', 'earningsettings.id')
 		          ->where('in_employment','=','Y')
+		          ->where('is_approved','=','1')
 		          ->select('earnings.id','first_name','middle_name','last_name','earnings_amount','earning_name','earning_date')
 		          ->get();
 
@@ -32,6 +33,7 @@ class EarningsController extends \BaseController {
 		
 		$employees = DB::table('employee')
 		          ->where('in_employment','=','Y')
+		           ->where('is_approved','=','1')
 		          ->get();
 		$earnings = Earningsetting::all();
 		$currency = Currency::find(1);
@@ -153,6 +155,7 @@ class EarningsController extends \BaseController {
 		$earning = DB::table('employee')
 		          ->join('earnings', 'employee.id', '=', 'earnings.employee_id')
 		          ->where('in_employment','=','Y')
+		           ->where('is_approved','=','1')
 		          ->where('earnings.id','=',$id)
 		          ->first();
 

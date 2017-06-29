@@ -12,6 +12,7 @@ class OvertimesController extends \BaseController {
 		$overtimes = DB::table('employee')
 		          ->join('overtimes', 'employee.id', '=', 'overtimes.employee_id')
 		          ->where('in_employment','=','Y')
+		           ->where('is_approved','=','1')
 		          ->select('overtimes.id','type','first_name','middle_name','last_name','amount','period','overtime_date')
 		          ->get();
 
@@ -29,6 +30,7 @@ class OvertimesController extends \BaseController {
 	{
 		$employees = DB::table('employee')
 		          ->where('in_employment','=','Y')
+		           ->where('is_approved','=','1')
 		          ->get();
         $currency = Currency::find(1);
 		return View::make('overtime.create', compact('employees','currency'));

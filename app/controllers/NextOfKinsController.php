@@ -12,6 +12,7 @@ class NextOfKinsController extends \BaseController {
 		$kins = DB::table('employee')
 		          ->join('nextofkins', 'employee.id', '=', 'nextofkins.employee_id')
 		          ->where('in_employment','=','Y')
+		           ->where('is_approved','=','1')
 		          ->get();
 
 		Audit::logaudit('Next of Kins', 'view', 'viewed employee next of kin');
@@ -36,6 +37,7 @@ class NextOfKinsController extends \BaseController {
 
 		$employees = DB::table('employee')
 		          ->where('in_employment','=','Y')
+		           ->where('is_approved','=','1')
 		          ->get();
 		return View::make('nextofkins.create', compact('employees','id'));
 	}

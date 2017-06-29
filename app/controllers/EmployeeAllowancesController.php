@@ -13,6 +13,7 @@ class EmployeeAllowancesController extends \BaseController {
 		          ->join('employee', 'employee_allowances.employee_id', '=', 'employee.id')
 		          ->join('allowances', 'employee_allowances.allowance_id', '=', 'allowances.id')
 		          ->where('in_employment','=','Y')
+		          ->where('is_approved','=','1')
 		          ->select('employee_allowances.id','first_name','middle_name','last_name','allowance_amount','allowance_name','allowance_date')
 		          ->get();
 
@@ -51,6 +52,7 @@ class EmployeeAllowancesController extends \BaseController {
 		
 		$employees = DB::table('employee')
 		          ->where('in_employment','=','Y')
+		           ->where('is_approved','=','1')
 		          ->get();
 		$allowances = Allowance::all();
 		$currency = Currency::find(1);
@@ -162,7 +164,8 @@ class EmployeeAllowancesController extends \BaseController {
 	public function edit($id)
 	{
 		$eallw = EAllowances::find($id);
-		$employees = Employee::all();
+		$employees = Employee::where('in_employment','=','Y')
+		           ->where('is_approved','=','1')->get();
 		$allowances = Allowance::all();
         $currency = Currency::find(1);
 		return View::make('employee_allowances.edit', compact('eallw','allowances','employees','currency'));

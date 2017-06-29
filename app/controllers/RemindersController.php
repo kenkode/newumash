@@ -9,7 +9,8 @@ class RemindersController extends \BaseController {
 	 */
 	public function index()
 	{
-		$employees = Employee::where('type_id',2)->where('in_employment','Y')->whereNotNull('start_date')->whereNotNull('end_date')->get();
+		$employees = Employee::where('type_id',2)->where('in_employment','Y')
+		           ->where('is_approved','=','1')->whereNotNull('start_date')->whereNotNull('end_date')->get();
 
         
 		Audit::logaudit('Reminders', 'view', 'viewed contract reminders');
@@ -23,6 +24,7 @@ class RemindersController extends \BaseController {
 		$employees = DB::table('documents')
              ->join('employee', 'documents.employee_id', '=', 'employee.id')
              ->where('in_employment','Y')
+		           ->where('is_approved','=','1')
              ->whereNotNull('from_date')
              ->whereNotNull('expiry_date')
              ->select('first_name','middle_name','last_name','document_name','document_path','documents.id as did','employee.id as eid','from_date','expiry_date')

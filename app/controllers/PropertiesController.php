@@ -12,6 +12,7 @@ class PropertiesController extends \BaseController {
 		$properties = DB::table('employee')
 		          ->join('properties', 'employee.id', '=', 'properties.employee_id')
 		          ->where('in_employment','=','Y')
+		           ->where('is_approved','=','1')
 		          ->get();
 
 		Audit::logaudit('Properties', 'view', 'viewed company properties');
@@ -29,6 +30,7 @@ class PropertiesController extends \BaseController {
 		$currency = Currency::find(1);
 		$employees = DB::table('employee')
 		          ->where('in_employment','=','Y')
+		           ->where('is_approved','=','1')
 		          ->get();
 		return View::make('properties.create', compact('employees','currency'));
 	}

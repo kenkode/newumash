@@ -15,6 +15,7 @@ class AppraisalsController extends \BaseController {
 		          ->join('appraisals', 'employee.id', '=', 'appraisals.employee_id')
 		          ->join('appraisalquestions', 'appraisals.appraisalquestion_id', '=', 'appraisalquestions.id')
 		          ->where('in_employment','=','Y')
+		          ->where('is_approved','=','1')
 		          ->select('appraisals.id','appraisalquestion_id','first_name','middle_name','last_name','question','performance','appraisals.rate')
 		          ->get();
 
@@ -32,6 +33,7 @@ class AppraisalsController extends \BaseController {
 	{
 		$employees = DB::table('employee')
 		          ->where('in_employment','=','Y')
+		           ->where('is_approved','=','1')
 		          ->get();
 		$appraisals = Appraisalquestion::all();
 		$categories = Appraisalcategory::all();

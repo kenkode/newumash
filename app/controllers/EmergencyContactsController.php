@@ -12,6 +12,7 @@ class EmergencyContactsController extends \BaseController {
 		$contacts = DB::table('employee')
 		          ->join('emergencycontacts', 'employee.id', '=', 'emergencycontacts.employee_id')
 		          ->where('in_employment','=','Y')
+		           ->where('is_approved','=','1')
 		          ->get();
 
 		Audit::logaudit('Emergency Contacts', 'view', 'viewed employee emergency contacts');
@@ -30,6 +31,7 @@ class EmergencyContactsController extends \BaseController {
 
 		$employees = DB::table('employee')
 		          ->where('in_employment','=','Y')
+		           ->where('is_approved','=','1')
 		          ->get();
 		return View::make('emergencycontacts.create', compact('employees','id'));
 	}
